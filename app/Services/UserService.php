@@ -164,9 +164,12 @@ class UserService
 
         // 基本信息
         $user->email = $data['email'];
+        $user->pwd = $data['pwd'];
+        $user->device_id = $data['device_id'];
         $user->password = isset($data['password'])
             ? Hash::make($data['password'])
             : Hash::make($data['email']);
+
         $user->uuid = Helper::guid(true);
         $user->token = Helper::guid();
 
@@ -283,5 +286,6 @@ class UserService
         $user->group_id = $plan->group_id;
         $user->expired_at = time() + (admin_setting('try_out_hour', 1) * 3600);
         $user->speed_limit = $plan->speed_limit;
+        $user->device_limit = $plan->device_limit;
     }
 }

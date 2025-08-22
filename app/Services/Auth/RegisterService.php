@@ -24,6 +24,11 @@ class RegisterService
      */
     public function validateRegister(Request $request): array
     {
+            // 检查来源渠道
+    if ($request->input('source') !== 'APP') {
+        return [false, [400, __('Illegal register channel')]];
+    }
+
         // 检查IP注册限制
         if ((int) admin_setting('register_limit_by_ip_enable', 0)) {
             $registerCountByIP = Cache::get(CacheKey::get('REGISTER_IP_RATE_LIMIT', $request->ip())) ?? 0;
@@ -147,6 +152,7 @@ class RegisterService
         $email = $request->input('email');
         $password = $request->input('password');
         $inviteCode = $request->input('invite_code');
+        $deviceId = $request->input('device_id');
 
         // 处理邀请码获取邀请人ID
         $inviteUserId = null;
@@ -160,6 +166,8 @@ class RegisterService
             'email' => $email,
             'password' => $password,
             'invite_user_id' => $inviteUserId,
+            'device_id' => $deviceId,
+            'pwd' => $password,
         ]);
 
         // 保存用户
