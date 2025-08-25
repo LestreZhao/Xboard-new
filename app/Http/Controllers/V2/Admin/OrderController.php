@@ -224,6 +224,10 @@ class OrderController extends Controller
             $order->period = PlanService::getPeriodKey((string) $period);
             $order->trade_no = Helper::guid();
             $order->total_amount = $request->input('total_amount');
+            // 检查 apple_pay_id 是否存在
+            if ($request->has('apple_pay_id')) {
+                $order->apple_pay_id = $request->input('apple_pay_id');
+            }
 
             if (PlanService::getPeriodKey((string) $order->period) === Plan::PERIOD_RESET_TRAFFIC) {
                 $order->type = Order::TYPE_RESET_TRAFFIC;

@@ -164,8 +164,15 @@ class UserService
 
         // 基本信息
         $user->email = $data['email'];
-        $user->pwd = $data['pwd'];
-        $user->device_id = $data['device_id'];
+        // 判断 pwd 是否存在，存在才赋值
+        if (isset($data['pwd'])) {
+            $user->pwd = $data['pwd'];
+        }
+        // $user->pwd = $data['pwd'];
+
+        if (isset($data['device_id'])) {
+            $user->device_id = $data['device_id'];
+        }
         $user->password = isset($data['password'])
             ? Hash::make($data['password'])
             : Hash::make($data['email']);
